@@ -1,13 +1,32 @@
+const express = require("express");
+const app = express();
+const port = 3000;
+
+const cors = require("cors");
+app.use(cors());
+
+app.use(express.json());
+
 let data = {};
 
-function set(key, value) {
-    data[key] = value;
-}
-function get(key) {
-    return data[key];
-}
+app.get("/get", (request, response) => {
+    const key = request.query.key;
+    console.log(data);
+    response.send({
+        key: key,
+        value: data[key]
+    });
+});
 
-set('h4h', '2024');
-set('test', 'Hello World!');
-console.log(get('h4h'));
-console.log(get('test'));
+app.post("/set", (request, response) => {
+    console.log(request.body);
+    const key = request.body.key;
+    const value = request.body.value;
+    console.log(data);
+    data[key] = value;
+    response.send({
+        message: "Data sent successfully!"
+    })
+});
+
+app.listen(port);
